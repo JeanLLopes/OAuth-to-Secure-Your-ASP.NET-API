@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http;
 
 namespace SocialNetwork.OAuthServer.API.Controllers
 {
-    [Authorize]
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        [Authorize]
+        public Dictionary<string, string> Get()
         {
-            return new string[] { "value1", "value2" };
+            //STRING RETURN
+            var listDic = new Dictionary<string, string>();
+            //GET THE TOKEN INFORMATIONS
+            var claimsPrincipal = User as ClaimsPrincipal;
+            //var username
+            foreach (var itemclaimsPrincipal in claimsPrincipal.Claims)
+            {
+                listDic.Add(itemclaimsPrincipal.Type.ToString(), itemclaimsPrincipal.Value.ToString());
+            }
+            return listDic;
         }
 
         // GET api/values/5
